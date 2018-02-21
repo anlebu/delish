@@ -1,0 +1,548 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Geolocation</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!--<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.1.6/css/swiper.min.css" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    <script>
+        function dialogMsg() {
+            $("#dialog-message").dialog({
+                //modal: true,
+                buttons: [{
+                    text: "Let's go",
+                    width: "45%",
+                    click: function () {
+                        $(this).dialog("close");
+                    }
+                },
+                {
+                    text: "Maybe Later",
+                    width: "45%",
+                    click: function () {
+                        $(this).dialog("close");
+                    },
+                },
+                {
+                    text: "Not Now",
+                    width: "45%",
+                    click: function () {
+                        $(this).dialog("close");
+                    },
+                },
+                {
+                    text: "View Site",
+                    width: "45%",
+                    click: function () {
+                        $(this).dialog("close");
+                    },
+                }]
+            });
+        }
+    </script>
+
+    <style>
+
+        /*icons*/
+        .centericon {
+            /*text-align: center;
+            width: 50%;*/
+            display: inline-block;
+            width: 55px;
+            height: 55px;
+            margin-right: 2px;
+            text-align: center;
+        }
+
+            .centericon:before {
+                content: '';
+                display: inline-block;
+                /*height: 40px;*/
+                vertical-align: middle;
+                /*margin-right: -0.25em;*/ /* Adjusts for spacing */
+            }
+
+        .selectedIcon {
+            color: darkblue;
+        }
+
+        .unselectedIcon:hover {
+            color: blue;
+        }
+        /*i.fa {
+            display: inline-block;
+        }
+
+        .svg-inline--fa:hover {
+            color: darkblue;
+        }*/
+        /* Always set the map height explicitly to define the size of the div
+        * element that contains the map. */
+        #map {
+            height: 100%;
+        }
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .center {
+            margin: auto;
+            position: relative;
+            text-align: center;
+            top: 10%;
+            width: 20%;
+        }
+
+        .screenContent {
+            padding: 1px;
+            width: 100%;
+            height: 100%;
+        }
+
+        .swiper-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            /*background: red;*/
+            /* Center slide text vertically */
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+        }
+
+        .swiper-container-v {
+            background: white;
+        }
+
+        .widthSet {
+            width: 250px;
+        }
+
+        .ui-button, .ui-button-text .ui-button {
+            font-size: 12px !important;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="dialog-message" style="display:none;font-size:14px;" title="Enchiladas Verdes $$">
+        <img src="static/food/EnchiladasVerdes.jpg" class="widthSet" />
+        <p>            
+            Green Enchiladas with a light green sauce, comes with rice, beans, pico, sourcream and guacamole.
+
+        </p>
+    </div>
+
+    <div class="center" style="background-image: url(/static/phone.png);background-size: 100%;background-repeat: no-repeat;background-position: center;width: 332.251px; height: 590.964px; padding: 96.5742px 25.6941px 94.8022px;">
+        <div style="width: 332.251px; height: 590.964px;">
+            <div class="Player__player___1Cqud" style="background-color: rgb(0, 0, 0);">
+                <div style="background-color: rgb(33, 41, 74); height: 0px;"></div>
+                <div>
+                    <div class="Screen__screenWrap___E6WBR">
+                        <div style="width: 332.251px; height: 590.964px; padding: 0px;">
+                            <div style="margin-left: 0px; width: 332.251px;border:solid;border-width:thin;border-color:black;">
+                                <div id="homebutton" style="position:absolute;width:65px;height:65px;top:700px;left:160px;"></div>
+                                <div id="screen" style="overflow:hidden;height: 591px; margin-top: 0px; margin-bottom: 0px;">
+                                    <div id="home" class="screenContent screens" style="display:none;background-image: url(/static/Method-for-How-to-Restore-iPhone-6-Plus-2.jpg); background-size: 100%;background-repeat: no-repeat;background-position: center center;">
+                                        <div id="mapbutton" style="position:absolute;width:65px;height:65px;top:200px;left:200px;"></div>
+                                        <div id="appbutton" style="position:absolute;width:48px;height:48px;top:520px;left:50px;background-image: url(/static/logo.png);background-size: 100%;background-repeat: no-repeat;background-position: center center; background-color:white;border-radius:10px;"></div>
+                                        <div style="position:absolute;width:48px;height:10px;top:568px;left:50px;color:white;font-size:smaller;">Delish</div>
+
+                                    </div>
+                                    <div id="apphome" class="screenContent screens" style="display:block;background-image: url(/static/appbackground.jpg); background-size: 130% 100%;background-repeat: no-repeat;background-position: center center;">
+                                        <div style="width:100%;height:100%;">
+
+                                            <div style="position:relative;height:55px;padding:2px;padding-top:17px;width:100%;top:0px;left:0px;background-image: url(/static/Clock.png);background-size: 100%;background-repeat: no-repeat;background-position: top center; background-color:rgb(249,249,249);">
+                                                <div id="app1button" style="position:relative;width:48px;height:48px;background-image: url(/static/logo.png);background-size: 100%;background-repeat: no-repeat;background-position: center center; background-color:white;border-radius:10px;"></div>
+
+
+                                            </div>
+
+                                            <div style="position:relative;width:100%;height:457px;">
+                                                <!-- Swiper -->
+                                                <div class="swiper-container swiper-container-h">
+                                                    <div class="swiper-wrapper">
+                                                        <div class="swiper-slide">
+                                                            <div class="swiper-container swiper-container-v">
+                                                                <div class="swiper-wrapper">
+
+                                                                    <div class="swiper-slide" style="color:darkblue;font:24px Sans-Serif;font-weight:bold;background-image:linear-gradient(rgba(255, 255, 255, 0.6),rgba(255, 255, 255, 0.9)), url(/static/food/Mexican.jpg);background-size: 100%;background-repeat: no-repeat;background-position: center center; height:50px; width:100%;">
+                                                                        Mexican
+                                                                    </div>
+                                                                    <div class="swiper-slide">
+                                                                        <img src="static/food/EnchiladasVerdes.jpg" height="60" />
+                                                                        <table style=" width:240px;font-size:12px;text-align:left;">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td style="font-size:16px;font-weight:bold;" onclick="dialogMsg();">Enchiladas Verdes</td>
+                                                                                    <td style="text-align:right;">$$</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Señor Tequila Mexican Grill.</td>
+                                                                                    <td style="text-align:right;">1.5 Miles</td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="swiper-slide">
+                                                                        <img src="static/food/EnchiladasVerdes.jpg" height="60" />
+                                                                        <table style=" width:240px;font-size:12px;text-align:left;">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td style="font-size:16px;font-weight:bold;" onclick="dialogMsg();">Enchiladas Verdes</td>
+                                                                                    <td style="text-align:right;">$$</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Señor Tequila Mexican Grill.</td>
+                                                                                    <td style="text-align:right;">1.5 Miles</td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="swiper-slide">
+                                                                        <img src="static/food/EnchiladasVerdes.jpg" height="60" />
+                                                                        <table style=" width:240px;font-size:12px;text-align:left;">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td style="font-size:16px;font-weight:bold;" onclick="dialogMsg();">Enchiladas Verdes</td>
+                                                                                    <td style="text-align:right;">$$</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Señor Tequila Mexican Grill.</td>
+                                                                                    <td style="text-align:right;">1.5 Miles</td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="swiper-slide">
+                                                                        <img src="static/food/EnchiladasVerdes.jpg" height="60" />
+                                                                        <table style=" width:240px;font-size:12px;text-align:left;">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td style="font-size:16px;font-weight:bold;" onclick="dialogMsg();">Enchiladas Verdes</td>
+                                                                                    <td style="text-align:right;">$$</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Señor Tequila Mexican Grill.</td>
+                                                                                    <td style="text-align:right;">1.5 Miles</td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="swiper-slide">
+                                                                        <img src="static/food/EnchiladasVerdes.jpg" height="60" />
+                                                                        <table style=" width:240px;font-size:12px;text-align:left;">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td style="font-size:16px;font-weight:bold;" onclick="dialogMsg();">Enchiladas Verdes</td>
+                                                                                    <td style="text-align:right;">$$</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Señor Tequila Mexican Grill.</td>
+                                                                                    <td style="text-align:right;">1.5 Miles</td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="swiper-slide">
+                                                                        <img src="static/food/EnchiladasVerdes.jpg" height="60" />
+                                                                        <table style=" width:240px;font-size:12px;text-align:left;">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td style="font-size:16px;font-weight:bold;" onclick="dialogMsg();">Enchiladas Verdes</td>
+                                                                                    <td style="text-align:right;">$$</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Señor Tequila Mexican Grill.</td>
+                                                                                    <td style="text-align:right;">1.5 Miles</td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="swiper-slide">
+                                                                        <img src="static/food/EnchiladasVerdes.jpg" height="60" />
+                                                                        <table style=" width:240px;font-size:12px;text-align:left;">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td style="font-size:16px;font-weight:bold;" onclick="dialogMsg();">Enchiladas Verdes</td>
+                                                                                    <td style="text-align:right;">$$</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Señor Tequila Mexican Grill.</td>
+                                                                                    <td style="text-align:right;">1.5 Miles</td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="swiper-slide">
+                                                                        <img src="static/food/EnchiladasVerdes.jpg" height="60" />
+                                                                        <table style=" width:240px;font-size:12px;text-align:left;">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td style="font-size:16px;font-weight:bold;" onclick="dialogMsg();">Enchiladas Verdes</td>
+                                                                                    <td style="text-align:right;">$$</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Señor Tequila Mexican Grill.</td>
+                                                                                    <td style="text-align:right;">1.5 Miles</td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="swiper-slide">
+                                                                        <img src="static/food/EnchiladasVerdes.jpg" height="60" />
+                                                                        <table style=" width:240px;font-size:12px;text-align:left;">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td style="font-size:16px;font-weight:bold;" onclick="dialogMsg();">Enchiladas Verdes</td>
+                                                                                    <td style="text-align:right;">$$</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Señor Tequila Mexican Grill.</td>
+                                                                                    <td style="text-align:right;">1.5 Miles</td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="swiper-slide">
+                                                                        <img src="static/food/EnchiladasVerdes.jpg" height="60" />
+                                                                        <table style=" width:240px;font-size:12px;text-align:left;">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td style="font-size:16px;font-weight:bold;" onclick="dialogMsg();">Enchiladas Verdes</td>
+                                                                                    <td style="text-align:right;">$$</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Señor Tequila Mexican Grill.</td>
+                                                                                    <td style="text-align:right;">1.5 Miles</td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="swiper-slide">
+                                                                        <img src="static/food/EnchiladasVerdes.jpg" height="60" />
+                                                                        <table style=" width:240px;font-size:12px;text-align:left;">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td style="font-size:16px;font-weight:bold;" onclick="dialogMsg();">Enchiladas Verdes</td>
+                                                                                    <td style="text-align:right;">$$</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Señor Tequila Mexican Grill.</td>
+                                                                                    <td style="text-align:right;">1.5 Miles</td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+
+
+                                                                </div>
+                                                                <!--<div class="swiper-pagination swiper-pagination-v"></div>-->
+                                                            </div>
+                                                        </div>
+                                                        <div class="swiper-slide">
+                                                            <div class="swiper-container swiper-container-v">
+                                                                <div class="swiper-wrapper">
+                                                                    <div class="swiper-slide" style="color:darkblue;font:24px Sans-Serif;font-weight:bold;background-image:linear-gradient(rgba(255, 255, 255, 0.6),rgba(255, 255, 255, 0.9)), url(/static/food/Vietnamese.jpg);background-size: 100%;background-repeat: no-repeat;background-position: center center; height:50px; width:100%;">
+                                                                        Vietnamese
+                                                                    </div>
+                                                                    <div class="swiper-slide">Vertical Slide 2</div>
+                                                                    <div class="swiper-slide">Vertical Slide 3</div>
+                                                                    <div class="swiper-slide">Vertical Slide 4</div>
+                                                                    <div class="swiper-slide">Vertical Slide 5</div>
+                                                                </div>
+                                                                <!--<div class="swiper-pagination swiper-pagination-v"></div>-->
+                                                            </div>
+                                                        </div>
+                                                        <div class="swiper-slide">
+                                                            <div class="swiper-container swiper-container-v">
+                                                                <div class="swiper-wrapper">
+                                                                    <div class="swiper-slide" style="color:darkblue;font:24px Sans-Serif;font-weight:bold;background-image:linear-gradient(rgba(255, 255, 255, 0.6),rgba(255, 255, 255, 0.9)), url(/static/food/Italian.jpg);background-size: 100%;background-repeat: no-repeat;background-position: center center; height:50px; width:100%;">
+                                                                        Italian
+                                                                    </div>
+                                                                    <div class="swiper-slide">Vertical Slide 2</div>
+                                                                    <div class="swiper-slide">Vertical Slide 3</div>
+                                                                    <div class="swiper-slide">Vertical Slide 4</div>
+                                                                    <div class="swiper-slide">Vertical Slide 5</div>
+                                                                </div>
+                                                                <!--<div class="swiper-pagination swiper-pagination-v"></div>-->
+                                                            </div>
+                                                        </div>
+                                                        <div class="swiper-slide">
+                                                            <div class="swiper-container swiper-container-v">
+                                                                <div class="swiper-wrapper">
+                                                                    <div class="swiper-slide" style="color:darkblue;font:24px Sans-Serif;font-weight:bold;background-image:linear-gradient(rgba(255, 255, 255, 0.6),rgba(255, 255, 255, 0.9)), url(/static/food/Thai.jpg);background-size: 100%;background-repeat: no-repeat;background-position: center center; height:50px; width:100%;">
+                                                                        Thai
+                                                                    </div>
+                                                                    <div class="swiper-slide">Vertical Slide 2</div>
+                                                                    <div class="swiper-slide">Vertical Slide 3</div>
+                                                                    <div class="swiper-slide">Vertical Slide 4</div>
+                                                                    <div class="swiper-slide">Vertical Slide 5</div>
+                                                                </div>
+                                                                <!--<div class="swiper-pagination swiper-pagination-v"></div>-->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Add Pagination -->
+                                                    <!--<div class="swiper-pagination swiper-pagination-h"></div>-->
+                                                </div>
+
+
+
+                                            </div><!--end swiper-->
+
+                                            <div style="position:relative;height:55px;padding:2px;width:100%;background-color:rgb(249,249,249);">
+
+                                                <div style="width:100%;font-size:2em;padding:2px; color:rgb(200,200,200)">
+                                                    <div class="selectedIcon centericon">
+                                                        <i class="fas fa-utensils text-center" aria-hidden="true"></i>
+                                                        <br />
+                                                        <p style="font-size:0.3em;-webkit-margin-before: 0em;-webkit-margin-after: 0em;">Food</p>
+                                                    </div>
+                                                    <div class="unselectedIcon centericon">
+                                                        <i class="fas fa-location-arrow text-center" aria-hidden="true"></i>
+                                                        <br />
+                                                        <p style="font-size:0.3em;-webkit-margin-before: 0em;-webkit-margin-after: 0em;">Location</p>
+                                                    </div>
+                                                    <div class="unselectedIcon centericon">
+                                                        <i class="fas fa-sliders-h text-center" aria-hidden="true"></i>
+                                                        <br />
+                                                        <p style="font-size:0.3em;-webkit-margin-before: 0em;-webkit-margin-after: 0em;">Settings</p>
+                                                    </div>
+                                                    <div class="unselectedIcon centericon">
+                                                        <i class="fas fa-search text-center" aria-hidden="true"></i>
+                                                        <br />
+                                                        <p style="font-size:0.3em;-webkit-margin-before: 0em;-webkit-margin-after: 0em;">Search</p>
+                                                    </div>
+                                                    <!--<i class="fas fa-search" style="margin-right:2px;"></i>-->
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <div id="map" class="screenContent screens" style="display:none;"></div>
+                                </div>
+                                <!--<div class="ScreenImage__hotspotLayerWrapper___1AI3H">
+                                <div class="HotspotLayer__hotspotLayer___3l6ct width-100 position-relative" style="height: 590.964px;">
+                                <div class="Hotspot__hotspot___1uv7p" style="left: 1px; top: 546px; width: 331px; height: 45px;">
+                                    </div><span></span></div></div>-->
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.1.6/js/swiper.js"></script>
+    <!-- Initialize Swiper -->
+    <script>
+        var swiperH = new Swiper('.swiper-container-h', {
+            spaceBetween: 0,
+            slidesPerView: 1,
+            pagination: {
+                el: '.swiper-pagination-h',
+                clickable: true,
+            },
+        });
+        var swiperV = new Swiper('.swiper-container-v', {
+            direction: 'vertical',
+            spaceBetween: 0,
+            autoHeight: true, //enable auto height
+
+            slidesPerView: 7,
+            pagination: {
+                el: '.swiper-pagination-v',
+                clickable: true,
+            },
+        });
+    </script>
+
+    <script>
+        $("#homebutton").click(function () {
+            $('.screens').hide();
+            $('#home').show();
+        });
+        $("#mapbutton").click(function () {
+            $('.screens').hide();
+            $('#map').show();
+        });
+        $("#appbutton").click(function () {
+            $('.screens').hide();
+            $('#apphome').show();
+        });
+
+        // Note: This example requires that you consent to location sharing when
+        // prompted by your browser. If you see the error "The Geolocation service
+        // failed.", it means you probably did not give permission for the browser to
+        // locate you.
+        var map, infoWindow;
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: -34.397, lng: 150.644 },
+                zoom: 11
+            });
+            infoWindow = new google.maps.InfoWindow;
+
+            // Try HTML5 geolocation.
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                    infoWindow.setPosition(pos);
+                    infoWindow.setContent('Location found.');
+                    infoWindow.open(map);
+                    map.setCenter(pos);
+                }, function () {
+                    handleLocationError(true, infoWindow, map.getCenter());
+                });
+            } else {
+                // Browser doesn't support Geolocation
+                handleLocationError(false, infoWindow, map.getCenter());
+            }
+        }
+
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+            infoWindow.setPosition(pos);
+            infoWindow.setContent(browserHasGeolocation ?
+                'Error: The Geolocation service failed.' :
+                'Error: Your browser doesn\'t support geolocation.');
+            infoWindow.open(map);
+        }
+    </script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyALQ96UESVOJm6-bgZtEwqtncv0_yQ42pM&callback=initMap">
+    </script>
+</body>
+</html> 
