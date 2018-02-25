@@ -1,0 +1,381 @@
+﻿<!-
+https://gis.cdc.gov/GRASP/Fluview/PedFluDeath.html
+https://gis.cdc.gov/grasp/fluview/fluportaldashboard.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assignment 3</title>
+    <script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+    <style>
+
+        .line {
+            fill: none;
+            stroke: red;
+            stroke-width: 1.5px;
+        }
+
+        .lineFocus {
+            fill: none;
+            stroke: black;
+            stroke-width: 1px;
+        }
+
+        .circle {
+            fill: white;
+            stroke: red;
+            stroke-width: 1.5px;
+        }
+
+        .lineBase {
+            fill: none;
+            stroke: rgb(55,96,146);
+            stroke-width: 1.5px;
+        }
+
+        .circleBase {
+            fill: white;
+            display: none;
+            stroke: rgb(55,96,146);
+            stroke-width: 1.5px;
+        }
+
+        .overlay {
+            fill: none;
+            pointer-events: all;
+        }
+
+
+        .focus1 {
+            fill: black;
+            font-size: large;
+            font-weight: bold;
+            stroke: white;
+            stroke-width: .2px;
+        }
+
+        .grid line {
+            stroke: lightgrey;
+            stroke-opacity: 0.7;
+            stroke-width: 1px;
+            shape-rendering: crispEdges;
+        }
+
+        .grid path {
+            stroke-width: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Assignment 3 line drawing</h1>
+    <h2>
+        PERCENTAGE OF VISITS FOR INFLUENZA-LIKE-ILLNESS REPORTED BY SENTINEL PROVIDERS
+    </h2>
+    <script type="text/javascript">
+
+        // set the dimensions and margins of the graph
+        var margin = { top: 20, right: 150, bottom: 100, left: 50 },
+            width = 1800 - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom;
+        var x = d3.scaleBand().range([0, width]);
+
+        var y = d3.scaleLinear().range([height, 0]);
+
+        // append the svg obgect to the target1
+        // appends a 'group' element to 'svg'
+        // moves the 'group' element to the top left margin
+        var svg = d3.select("body").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
+
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - margin.left)
+            .attr("x", 0 - (height / 2))
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text("% of visits for ILI");
+
+        // text label for the x axis
+        svg.append("text")
+            .attr("transform",
+            "translate(" + (width / 2) + " ," +
+            (height + margin.top + 30) + ")")
+            .style("text-anchor", "middle")
+            .text("MMWR Week");
+
+        // Prep the tooltip bits, initial display is hidden
+        var tooltip = svg.append("g")
+            .attr("class", "tooltip")
+            .style("display", "none");
+
+        tooltip.append("rect")
+            .attr("class", "tooltipBox")
+            .attr("width", 190)
+            .attr("height", 35)
+            .attr("fill", "white")
+            .attr("stroke", "darkgrey")
+            .attr("stroke-width", "1px")
+            .style("opacity", 0.8);
+        tooltip.append("text")
+            .attr("id", "tool1")
+            .attr("x", 25)
+            .attr("dy", "1.2em")
+            .style("text-anchor", "left")
+            .attr("font-size", "12px")
+            .attr("font-weight", "bold");
+        tooltip.append("text")
+            .attr("id", "tool2")
+            .attr("x", 25)
+            .attr("y", 13)
+            .attr("dy", "1.2em")
+            .style("text-anchor", "left")
+            .attr("font-size", "12px")
+            .attr("font-weight", "bold");
+
+        tooltip.append("line")          // attach a line
+            .attr("class", "line")
+            .attr("x1", 5)     // x position of the first end of the line
+            .attr("y1", 12)      // y position of the first end of the line
+            .attr("x2", 20)     // x position of the second end of the line
+            .attr("y2", 12)    // y position of the second end of the line
+
+        tooltip.append("line")          // attach a line
+            .attr("class", "lineBase")
+            .attr("x1", 5)     // x position of the first end of the line
+            .attr("y1", 25)      // y position of the first end of the line
+            .attr("x2", 20)     // x position of the second end of the line
+            .attr("y2", 25)    // y position of the second end of the line
+
+
+        var legend = svg.append("g")
+            .attr("class", "legend")
+            .attr("transform",
+            "translate(" + 0 + " ," +
+            (height + margin.top + 10) + ")");
+        
+        legend.append("rect")
+            .attr("class", "legendBox")
+            .attr("width", 190)
+            .attr("height", 35)
+            .attr("fill", "white")
+            .attr("stroke", "darkgrey")
+            .attr("stroke-width", "1px")
+            .style("opacity", 0.8);
+        legend.append("text")
+            .attr("id", "tool1")
+            .attr("x", 25)
+            .attr("dy", "1.2em")
+            .style("text-anchor", "left")
+            .attr("font-size", "12px")
+            .attr("font-weight", "bold")
+            .text("Percent Weighted ILI");
+        legend.append("text")
+            .attr("id", "tool2")
+            .attr("x", 25)
+            .attr("y", 13)
+            .attr("dy", "1.2em")
+            .style("text-anchor", "left")
+            .attr("font-size", "12px")
+            .attr("font-weight", "bold")
+            .text("National Baseline");;
+
+        legend.append("line")          // attach a line
+            .attr("class", "line")
+            .attr("x1", 5)     // x position of the first end of the line
+            .attr("y1", 12)      // y position of the first end of the line
+            .attr("x2", 20)     // x position of the second end of the line
+            .attr("y2", 12)    // y position of the second end of the line
+
+        legend.append("line")          // attach a line
+            .attr("class", "lineBase")
+            .attr("x1", 5)     // x position of the first end of the line
+            .attr("y1", 25)      // y position of the first end of the line
+            .attr("x2", 20)     // x position of the second end of the line
+            .attr("y2", 25)    // y position of the second end of the line
+
+        // gridlines in y axis function
+        function make_y_gridlines() {
+            return d3.axisLeft(y)
+        }
+
+        d3.csv("/data/ILINet.csv", function (error, data) {
+            if (error) throw error;
+
+            //convert all properties to numbers
+            data.forEach(function (d) {
+                d.yearweek = +d.yearweek;
+                d.WEIGHTEDILI = +d.WEIGHTEDILI;
+            });
+
+            // Scale the range of the data in the domains
+            //x.domain([0, d3.max(data, function (d) { return d.yearweek; })]);
+            x.domain(data.map(function (d) { return d.yearweek; }));
+            y.domain([0, d3.max(data, function (d) { return d.WEIGHTEDILI; })]);
+
+
+            // add the Y gridlines
+            svg.append("g")
+                .attr("class", "grid")
+                .call(make_y_gridlines()
+                    .ticks(6)
+                    .tickSize(-width)
+                    .tickFormat("")
+                )
+
+            let valueline1 = d3.line()
+                .x(function (d) { return x(d.yearweek); })
+                .y(function (d) { return y(2.2); });//this data was not available on the downloaded file
+
+            let valueline2 = d3.line()
+                .x(function (d) { return x(d.yearweek); })
+                .y(function (d) { return y(d.WEIGHTEDILI); });
+
+            // Add the valueline path.
+            let baseg = svg.append("g");
+            baseg.append("path")
+                .data([data])
+                .attr("class", "lineBase")
+                .attr("d", valueline1)
+
+            baseg.selectAll("circle")
+                .data(data)
+                .enter().append("circle")
+                .attr("class", "circleBase")
+                .attr("cx", function (d) { return x(d.yearweek); })
+                .attr("cy", function (d) { return y(2.2); })
+                .attr("r", 2);
+
+            let lineg = svg.append("g");
+            lineg.append("path")
+                .data([data])
+                .attr("class", "line")
+                .attr("d", valueline2)
+
+            lineg.selectAll("circle")
+                .data(data)
+                .enter().append("circle")
+                .attr("class", "circle")
+                .attr("cx", function (d) { return x(d.yearweek); })
+                .attr("cy", function (d) { return y(d.WEIGHTEDILI); })
+                .attr("r", 2);
+
+            svg.append("rect")
+                .attr("transform", "translate(" + 0 + "," + 0 + ")")
+                .attr("class", "overlay")
+                .attr("width", width)
+                .attr("height", height)
+                .on("mouseover", function () { focus.style("display", null); focus2.style("display", null); focus3.style("display", null); tooltip.style("display", null);})
+                .on("mouseout", function () { focus.style("display", "none"); focus2.style("display", "none"); focus3.style("display", "none"); tooltip.style("display", "none");})
+                .on("mousemove", mousemove);
+
+            //add point label and text
+            var focus = svg.append("g");
+            focus.style("display", "none");
+
+            focus.append("g")
+                //.attr("class", "focus1")
+                .append("circle")
+                .style("stroke", "black")
+                .style("fill", "white")
+                //.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                .attr("r", 4);
+            svg.select(".focus1")
+                .append("text")
+                //.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                .attr("x", 9)
+                .attr("dy", ".55em");
+
+            var focus2 = svg.append("g");
+            focus2.style("display", "none");
+
+            focus2.append("g")
+                .attr("class", "focus1")
+                .append("circle")
+                .style("stroke", "black")
+                .style("fill", "white")
+                .attr("r", 4);
+
+            var focus3 = svg.append("g");
+            focus3.style("display", "none");
+
+            focus3.append("line")          // attach a line
+                .attr("class", "lineFocus")
+                .attr("x1", 0)     // x position of the first end of the line
+                .attr("y1", 0)      // y position of the first end of the line
+                .attr("x2", 0)     // x position of the second end of the line
+                .attr("y2", height)    // y position of the second end of the line
+
+            function mousemove() {
+                var eachBand = self.x.step();
+                var i = Math.round((d3.mouse(this)[0] / eachBand));
+                d = data[i];
+                focus.attr("transform", "translate(" + x(d.yearweek) + "," + y(d.WEIGHTEDILI) + ")");
+                focus.select("text").text(function () { return d.WEIGHTEDILI; });
+                focus2.attr("transform", "translate(" + x(d.yearweek) + "," + y(2.2) + ")");
+
+                focus3.attr("transform", "translate(" + x(d.yearweek) + ",0)");
+
+                var offset = 0;
+                if (i > (data.length / 2)) {
+                    offset = 190;
+                }
+
+                tooltip.attr("transform", "translate(" + ( x(d.yearweek) - offset)  + "," + (y(6.5)) + ")");
+                tooltip.select("#tool1").text("Percent Weighted ILI: " + d.WEIGHTEDILI);
+                tooltip.select("#tool2").text("National Baseline: " + 2.2);
+                tooltip.style("display", null);
+                d3.selectAll(".tooltip").raise();
+
+
+            }
+
+
+            // append the rectangles for the bar chart
+            //svg.selectAll(".bar")
+            //    .data(data)
+            //    .enter().append("rect")
+            //    .attr("class", "bar")
+            //    .attr("x", function (d) { return x(d.yearweek); })
+            //    .attr("width", x.bandwidth())
+            //    .attr("y", function (d) { return y(d.PREVIOUSWEEKSDEATHS); })
+            //    .attr("height", function (d) { return height - y(d.PREVIOUSWEEKSDEATHS); });
+
+            var bandSize = x.bandwidth();
+
+            //Add the X Axis
+            var ticks = svg.append("g")
+                .data(data)
+                .attr("class", "Xaxis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x)
+                    .tickFormat(d => d.toString().substring(0, 4) + "-" + d.toString().substring(4,7))//  (d / 100).toFixed(2).replace(".", "-"))
+            );
+            
+            ticks.selectAll(".tick line").attr("transform", "translate(" + ((bandSize / 2) * -1) + ",0)")
+            ticks.selectAll(".tick text").attr("transform", "translate(" + ((bandSize / 2) * -1) + ",0)")
+                //.selectAll("text")
+                //.attr("y", 6)
+                //.attr("x", 6)
+                //.style("text-anchor", "start");
+
+                //.selectAll(".tick").selectAll(".line").attr("transform", "translate(" + ((bandSize/2)*-1) + ",0)")
+                ;
+
+            // Add the Y Axis
+            svg.append("g")
+                .attr("class", "Yaxis")
+                .call(d3.axisLeft(y));
+
+        });
+
+
+    </script>
+
+</body>
+</html>

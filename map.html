@@ -1,0 +1,386 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assignment 4</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+</head>
+<body style="width:100%;">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <h1>A Weekly Influenza Surveillance Report Prepared by the Influenza Division</h1>
+    <h2>Influenza-Like Illness (ILI) Activity Level Indicator Determined by Data Reported to ILINet</h2>
+
+    <span style="width:100%;">
+        <label for="season"
+               style="display: inline-block; text-align: right">
+            Season:
+        </label>
+        <select id="season"></select>
+    </span>
+    <span style="width:100%;">
+        <label for="weekSlider"
+               style="display: inline-block; text-align: right">
+            Week: <span id="weekSlider-value">1</span>
+        </label>
+        <input type="range" style="width:800px;" min="1" max="52" step="1" value="1" id="weekSlider">
+    </span>
+
+    <script>
+        var projection = d3.geoAlbersUsa();
+        var path = d3.geoPath().projection(projection);
+
+
+        var map = d3.select("body")
+            .append("svg")
+            .attr("width", 960)
+            .attr("height", 500);
+
+        var colorScale = d3.scaleOrdinal()
+            .domain([10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0])
+            .range([
+                "rgb(204, 0, 0)",
+                "rgb(250, 79, 0)",
+                "rgb(252, 130, 0)",
+                "rgb(252, 177, 0)",
+                "rgb(247, 223, 0)",
+                "rgb(224, 245, 0)",
+                "rgb(186, 247, 0)",
+                "rgb(140, 247, 0)",
+                "rgb(91, 247, 0)",
+                "rgb(0, 194, 0)",
+                //"rgb(255, 255, 255)",
+                "rgb(255, 255, 255)"
+            ]
+            );
+
+        var data = d3.map();
+        d3.queue()
+            .defer(d3.json, "/data/gz_2010_us_040_00_500k.json")
+            .defer(d3.csv, "/data/StateDatabySeason.csv")
+            .await(function (error, geojson, fludata) {
+
+                var season = d3.select("#season");
+                var weekSlider = d3.select("#weekSlider");
+
+                season
+                    .selectAll("option")
+                    .data(d3.map(fludata, function (d) { return d.SEASON; }).keys())
+                    .enter()
+                    .append("option")
+                    .text(function (d) { return d; })
+                    .attr("value", function (d) { return d; });
+
+
+                var legend = map.append("g")
+                    .attr("class", "legend")
+                    .style("fill", function (d) { return "red" })
+                    .attr("transform", "translate(" + 900 + "," + 10 + ")");
+
+                var colors = d3.map(fludata, function (d) { return +(d["ACTIVITY LEVEL"].split(" ")[1]); }).keys();
+
+                legend
+                    .append("text")
+                    .attr("x", 0)
+                    .style("fill", "black")
+                    .attr("y", 0)
+                    .attr("dy", "1.2em")
+                    .style("text-anchor", "middle")
+                    .attr("font-size", "12px")
+                    .attr("font-weight", "bold")
+                    .text("Actiity Level")
+                    ;
+
+                legend
+                    .selectAll("rect")
+                    .data(colors)
+                    .enter()
+                    .append("rect")
+                    .attr("x", 0)
+                    .attr("y", function (d) { return (198 - (d * 18)) })
+                    .attr("width", 20)
+                    .attr("height", 15)
+                    .style("stroke", "black")
+                    .style("fill", function (d) { return colorScale(d) })
+                    ;
+
+                legend
+                    .selectAll("text")
+                    .data(colors)
+                    .enter()
+                    .append("text")
+                    .attr("x", 23)
+                    .style("fill", "black")
+                    .attr("y", function (d) { return (198 - (d * 18)) })
+                    .attr("dy", "1.2em")
+                    .attr("font-size", "12px")
+                    .attr("font-weight", "bold")
+                    .text(function (d) {  return d; })
+                    ;
+
+
+                weekSlider.on("input", function () {
+                    // Do stuff -- this.value is the slider value
+                    d3.select("#weekSlider-value").text(this.value);
+                    var week = this.value;
+                    data = d3.map();
+                    //filter season and week
+                    var fludatafiltered = fludata.filter(function (d) {
+
+                        return d.SEASON == season.node().value & d.WEEK == week
+                            ;
+                    })
+                    fludatafiltered.forEach(function (d) {
+                        data.set(d.STATENAME,
+                            d
+                        );
+                    });
+                    
+                    map.selectAll("path")
+                        .style("fill", function (d) {
+                            //Get data value
+                            var value = data.get(d.properties.NAME);
+                            if (value != null) {
+                                let actlevel = +(value["ACTIVITY LEVEL"].split(" ")[1]);
+                                return colorScale(actlevel);
+                            } else {
+                                console.log("ups");
+                                return "#ccc";
+                            }
+                        });
+                });
+
+                season.on("change", function () {
+                    // Do stuff -- this.value is the slider value
+                    var week = document.getElementById("weekSlider").value;
+
+                    data = d3.map();
+                    //filter season and week
+                    var fludatafiltered = fludata.filter(function (d) {
+
+                        return d.SEASON == season.node().value & d.WEEK == week
+                            ;
+                    })
+                    fludatafiltered.forEach(function (d) {
+                        data.set(d.STATENAME,
+                            d
+                        );
+                    });
+                    map.selectAll("path")
+                        .style("fill", function (d) {
+                            //Get data value
+                            var value = data.get(d.properties.NAME);
+                            if (value != null) {
+                                let actlevel = +(value["ACTIVITY LEVEL"].split(" ")[1]);
+                                return colorScale(actlevel);
+                            } else {
+                                console.log("ups");
+                                return "#ccc";
+                            }
+                        });
+                });
+
+
+                //filter season and week
+                var fludatafiltered = fludata.filter(function (d) {
+                    return d.SEASON == "2011-12" & d.WEEK == 1
+                        ;
+                })
+
+                fludatafiltered.forEach(function (d) {
+                    data.set(d.STATENAME,
+                        d
+                    );
+                });
+
+                drawMaps(geojson);
+            });
+
+        //d3.json("/data/gz_2010_us_040_00_500k.json", drawMaps);
+
+        function wrap(text, width) {
+            text.each(function () {
+                var text = d3.select(this),
+                    words = text.text().split(/\s+/).reverse(),
+                    word,
+                    line = [],
+                    lineNumber = 0,
+                    lineHeight = 1.1, // ems
+                    y = text.attr("y"),
+                    x = text.attr("x"),
+                    dy = parseFloat(text.attr("dy")),
+                    tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+                while (word = words.pop()) {
+                    line.push(word);
+                    tspan.text(line.join(" "));
+                    if (tspan.node().getComputedTextLength() > width) {
+                        line.pop();
+                        tspan.text(line.join(" "));
+                        line = [word];
+                        tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                    }
+                }
+            });
+        }
+
+        function drawMaps(geojson) {
+
+            // Prep the tooltip bits, initial display is hidden
+            var tooltip = map.append("g")
+                .attr("class", "tooltip")
+                .style("display", "none")
+                ;
+            tooltip.append("rect")
+                .attr("class", "tooltipBox")
+                .attr("width", 190)
+                .attr("height", 135)
+                .attr("rx", 6)
+                .attr("ry", 6)
+                .attr("fill", "white")
+                .attr("stroke", "darkgrey")
+                .attr("stroke-width", "1px")
+                .style("opacity", 0.8);
+
+            tooltip.append("rect")
+                .attr("width", 190)
+                .attr("height", 35)
+                .attr("ry", 6)
+                .attr("fill", "lightgray")
+                .attr("stroke", "darkgrey")
+                .attr("stroke-width", "1px")
+                .style("opacity", 0.9);
+
+            tooltip.append("rect")
+                .attr("id", "level1")
+                .attr("width", 25)
+                .attr("height", 15)
+                .attr("x", 160)
+                .attr("y", 3)
+                .attr("ry", 3)
+                .attr("fill", "red")
+                .attr("stroke", "darkgrey")
+                .attr("stroke-width", "1px");
+
+            tooltip.append("text")
+                .attr("id", "level1text")
+                .attr("x", 185)
+                .attr("y", 17)
+                .attr("dy", "1.2em")
+                .style("text-anchor", "end")
+                .attr("font-size", "12px")
+                .attr("font-weight", "bold")
+                .text("Sample2222")
+                ;
+
+
+            tooltip.append("text")
+                .attr("id", "tool1")
+                .attr("x", 5)
+                .attr("dy", "1.2em")
+                .style("text-anchor", "left")
+                .attr("font-size", "15px")
+                .attr("font-weight", "bold")
+                .text("Montana")
+                ;
+            tooltip.append("text")
+                .attr("id", "tool2")
+                .attr("x", 5)
+                .attr("y", 17)
+                .attr("dy", "1.2em")
+                .style("text-anchor", "left")
+                .attr("font-size", "13px")
+                //.attr("font-weight", "bold")
+                .text("ILI Activity Level");
+
+            var t = tooltip.append("text")
+                .attr("id", "tool3")
+                .attr("dy", "1.2em")
+                .style("text-anchor", "middle")
+                .attr("font-size", "13px")
+                .attr("x", 95)
+                .attr("y", 32)
+                .text("Click on a State will take you to");
+            wrap(t, 180);
+            
+            map.selectAll("path")
+                .data(geojson.features)
+                .enter()
+                .append("path")
+                .attr("d", path)
+                .style("fill", function (d) {
+                    //Get data value
+                    var value = data.get(d.properties.NAME);
+                    if (value != null) {
+                        let actlevel = +(value["ACTIVITY LEVEL"].split(" ")[1]);
+                        return colorScale(actlevel);
+                    } else {
+                        console.log("ups");
+                        return "#ccc";
+                    }
+                })
+                .attr("stroke", "#222")
+                .on("click", function (d) {
+                    var value = data.get(d.properties.NAME);
+                    if (value != null) {
+                        let url = (value["URL"]);
+                        window.open(url);
+
+                    }
+                })
+                .on("mouseover", function (d) {
+                    var x0 = d3.mouse(this)[0];
+                    var y0 = d3.mouse(this)[1];
+
+                    let state = d3.select(this);
+                    state.attr("stroke", "blue");
+                    state.attr("stroke-width", "2px");
+                    state.raise();
+
+                    var value = data.get(d.properties.NAME);
+                    if (value != null) {
+                        let website = (value["WEBSITE"]);
+                        let t3 = tooltip.select("#tool3");
+                        t3.text("Click on a State will take you to " + website);
+                        wrap(t3, 180);
+
+                        let level1text = tooltip.select("#level1text");
+                        level1text.text(value["ACTIVITY LEVEL LABEL"]);
+
+                        let level1 = tooltip.select("#level1");
+                        let actlevel = +(value["ACTIVITY LEVEL"].split(" ")[1]);
+                        level1.style("fill", function (d) {
+                            return colorScale(actlevel)
+                        });
+
+                    } else {
+                        tooltip.select("#tool3").text("");
+                    }
+                    tooltip.select("#tool1").text(d.properties.NAME);
+                    let tooltipinfo = tooltip.node().getBBox();
+
+                    let xoff = 0;
+                    let yoff = 0;
+                    if (x0 > 475)
+                        xoff = tooltipinfo.width * -1;
+                    if (y0 > 250)
+                        yoff = tooltipinfo.height * -1;
+
+                    tooltip.attr("transform", "translate(" + (x0 + (xoff)) + "," + (y0 + (yoff)) + ")");
+                    tooltip.style("display", null);
+                    tooltip.raise();
+                })
+                .on("mouseout", function () {
+
+                    tooltip.style("display", "none");
+                    let state = d3.select(this);
+                    state.attr("stroke-width", "1px");
+                    state.attr("stroke", "#222");
+                })
+                ;
+
+        }
+
+    </script>
+</body>
+</html>
