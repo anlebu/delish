@@ -1,0 +1,4 @@
+# HTTrack Website Copier Cookie File
+# This file format is compatible with Netscape cookies
+www.thesenortequila.com	TRUE	/	FALSE	1999999999	PHPSESSID	036dd233e2663e2666e9156fd8fba1da
+
