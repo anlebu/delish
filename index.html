@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>Geolocation</title>
+    <title>Delish</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -21,6 +21,8 @@
                     width: "45%",
                     click: function () {
                         $(this).dialog("close");
+                        $('.screens').hide();
+                        $('#map2').show();
                     }
                 },
                 {
@@ -42,6 +44,8 @@
                     width: "45%",
                     click: function () {
                         $(this).dialog("close");
+                        $('.screens').hide();
+                        $('#appnavigate').show();
                     },
                 }]
             });
@@ -144,14 +148,13 @@
         .ui-button, .ui-button-text .ui-button {
             font-size: 12px !important;
         }
-
     </style>
 </head>
 <body>
 
     <div id="dialog-message" style="display:none;font-size:14px;" title="Enchiladas Verdes $$">
         <img src="static/food/EnchiladasVerdes.jpg" class="widthSet" />
-        <p>            
+        <p>
             Green Enchiladas with a light green sauce, comes with rice, beans, pico, sourcream and guacamole.
 
         </p>
@@ -179,11 +182,11 @@
                                             <div style="position:relative;height:55px;padding:2px;padding-top:17px;width:100%;top:0px;left:0px;background-image: url(static/Clock2.png);background-size: 100%;background-repeat: no-repeat;background-position: top center; background-color:rgb(249,249,249);">
                                                 <div id="app1button" style="position:relative;width:48px;height:48px;background-image: url(static/logo.png);background-size: 100%;background-repeat: no-repeat;background-position: center center; background-color:white;border-radius:10px;"></div>
 
-                                            <!--as-->
+                                                <!--as-->
 
                                             </div>
 
-                                            <div style="position:relative;width:100%;height:457px;">
+                                            <div style="position:relative;width:100%;height:446px;">
                                                 <!-- Swiper -->
                                                 <div class="swiper-container swiper-container-h">
                                                     <div class="swiper-wrapper">
@@ -408,13 +411,14 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <!-- Add Pagination -->
-                                                    <div class="swiper-pagination swiper-pagination-h"></div>
+
                                                 </div>
 
 
 
                                             </div><!--end swiper-->
+                                            <!-- Add Pagination -->
+                                            <div class="swiper-pagination swiper-pagination-h" style="position:relative;width:100%;height:11px;line-height:10px;background-color:whitesmoke;"></div>
 
                                             <div style="position:relative;height:55px;padding:2px;width:100%;background-color:rgb(249,249,249);">
 
@@ -446,7 +450,48 @@
 
 
                                     </div>
-                                    <div id="map" class="screenContent screens" style="display:none;"></div>
+
+                                    <div id="appnavigate" class="screenContent screens" style="display:none;background-image: url(static/appbackground.jpg); background-size: 130% 100%;background-repeat: no-repeat;background-position: center center;">
+                                        <div style="width:100%;height:100%;">
+
+                                            <div style="position:relative;height:55px;padding:2px;padding-top:17px;width:100%;top:0px;left:0px;background-image: url(static/Clock2.png);background-size: 100%;background-repeat: no-repeat;background-position: top center; background-color:rgb(249,249,249);">
+                                                <div id="app1button2" style="position:relative;width:48px;height:48px;background-image: url(static/logo.png);background-size: 100%;background-repeat: no-repeat;background-position: center center; background-color:white;border-radius:10px;"></div>
+
+                                                <!--as-->
+
+                                            </div>
+
+                                            <div style="position:relative;width:100%;height:516px;">
+                                                <iframe src="http://www.thesenortequila.com/" style="width:100%;height:100%;border:none;"></iframe>
+
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+
+                                    <div id="map2" class="screenContent screens" style="display:none;background-image: url(static/appbackground.jpg); background-size: 130% 100%;background-repeat: no-repeat;background-position: center center;">
+                                        <div style="width:100%;height:100%;">
+
+                                            <div style="position:relative;height:55px;padding:2px;padding-top:17px;width:100%;top:0px;left:0px;background-image: url(static/Clock2.png);background-size: 100%;background-repeat: no-repeat;background-position: top center; background-color:rgb(249,249,249);">
+                                                <div id="app1button3" style="position:relative;width:48px;height:48px;background-image: url(static/logo.png);background-size: 100%;background-repeat: no-repeat;background-position: center center; background-color:white;border-radius:10px;"></div>
+
+                                                <!--as-->
+
+                                            </div>
+
+                                            <div style="position:relative;width:100%;height:516px;">
+                                                <iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d112042.91634509587!2d-81.30149513381564!3d28.64950263174331!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e6!4m5!1s0x88e76865018e5ab3%3A0x751b373223c2080b!2sUCF+College+of+Nursing%2C+Research+Parkway%2C+Orlando%2C+FL!3m2!1d28.587893299999998!2d-81.1993085!4m5!1s0x88e76dbf6de18bff%3A0xde546ab3b98b0fc3!2sSenor+Tequila%2C+855+E+State+Rd+434%2C+Winter+Springs%2C+FL+32708!3m2!1d28.703476!2d-81.28635899999999!5e0!3m2!1sen!2sus!4v1519579775811" frameborder="0" style="width:100%;height:100%;border:none;" allowfullscreen></iframe>
+
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                       
+                                    </div>
                                 </div>
                                 <!--<div class="ScreenImage__hotspotLayerWrapper___1AI3H">
                                 <div class="HotspotLayer__hotspotLayer___3l6ct width-100 position-relative" style="height: 590.964px;">
@@ -494,56 +539,121 @@
         });
         $("#mapbutton").click(function () {
             $('.screens').hide();
-            $('#map').show();
+            $('#map2').show();
         });
         $("#appbutton").click(function () {
             $('.screens').hide();
             $('#apphome').show();
         });
+        $("#app1button2").click(function () {
+            $('.screens').hide();
+            $('#apphome').show();
+        });
+        $("#app1button3").click(function () {
+            $('.screens').hide();
+            $('#apphome').show();
+        });
+
+        
+
+
 
         // Note: This example requires that you consent to location sharing when
         // prompted by your browser. If you see the error "The Geolocation service
         // failed.", it means you probably did not give permission for the browser to
         // locate you.
-        var map, infoWindow;
-        function initMap() {
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: { lat: -34.397, lng: 150.644 },
-                zoom: 11
-            });
-            infoWindow = new google.maps.InfoWindow;
+        //var map, infoWindow;
+        //function initMap() {
+        //    var indianapolis = { lat: 28.7034699, lng: -81.286346 };
+        //    map = new google.maps.Map(document.getElementById('map'), {
+        //        center: indianapolis,
+        //        zoom: 20
+        //    });
 
-            // Try HTML5 geolocation.
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    var pos = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                    };
+        //    var directionsDisplay = new google.maps.DirectionsRenderer({
+        //        map: map
+        //    });
+        //    //infoWindow = new google.maps.InfoWindow;
+        //    if (navigator.geolocation) {
+        //        navigator.geolocation.getCurrentPosition(function (position) {
+        //            var pos = {
+        //                lat: position.coords.latitude,
+        //                lng: position.coords.longitude
+        //            };
+                    
+                    
+        //            // Set destination, origin and travel mode.
+        //            var request = {
+        //                destination: indianapolis,
+        //                origin: pos,
+        //                travelMode: 'DRIVING'
+        //            };
 
-                    infoWindow.setPosition(pos);
-                    infoWindow.setContent('Location found.');
-                    infoWindow.open(map);
-                    map.setCenter(pos);
-                }, function () {
-                    handleLocationError(true, infoWindow, map.getCenter());
-                });
-            } else {
-                // Browser doesn't support Geolocation
-                handleLocationError(false, infoWindow, map.getCenter());
-            }
-        }
+        //            // Pass the directions request to the directions service.
+        //            var directionsService = new google.maps.DirectionsService();
+        //            directionsService.route(request, function (response, status) {
+        //                if (status == 'OK') {
+        //                    bounds = new google.maps.LatLngBounds();
+        //                    loc = new google.maps.LatLng(pos.lat, pos.lng);
+        //                    bounds.extend(new google.maps.LatLng(indianapolis.lat, indianapolis.lng));
+        //                    map.fitBounds(bounds);
+        //                    map.panToBounds(bounds); 
 
-        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-            infoWindow.setPosition(pos);
-            infoWindow.setContent(browserHasGeolocation ?
-                'Error: The Geolocation service failed.' :
-                'Error: Your browser doesn\'t support geolocation.');
-            infoWindow.open(map);
-        }
+        //                    // Display the route on the map.
+        //                    directionsDisplay.setDirections(response);
+
+
+        //                }
+        //            });
+        //            //directionsDisplay.setPosition(pos);
+
+        //            //infoWindow.setPosition(pos);
+        //            //infoWindow.setContent('Location found.');
+        //            //infoWindow.open(map);
+        //            //map.setCenter(pos);
+        //        }, function () {
+        //            handleLocationError(true, infoWindow, map.getCenter());
+        //        });
+        //    } else {
+        //        // Browser doesn't support Geolocation
+        //        handleLocationError(false, infoWindow, map.getCenter());
+        //    }
+
+
+
+
+
+        //    //// Try HTML5 geolocation.
+        //    //if (navigator.geolocation) {
+        //    //    navigator.geolocation.getCurrentPosition(function (position) {
+        //    //        var pos = {
+        //    //            lat: position.coords.latitude,
+        //    //            lng: position.coords.longitude
+        //    //        };
+
+        //    //        infoWindow.setPosition(pos);
+        //    //        infoWindow.setContent('Location found.');
+        //    //        infoWindow.open(map);
+        //    //        map.setCenter(pos);
+        //    //    }, function () {
+        //    //        handleLocationError(true, infoWindow, map.getCenter());
+        //    //    });
+        //    //} else {
+        //    //    // Browser doesn't support Geolocation
+        //    //    handleLocationError(false, infoWindow, map.getCenter());
+        //    //}
+        //}
+
+        //function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        //    infoWindow.setPosition(pos);
+        //    infoWindow.setContent(browserHasGeolocation ?
+        //        'Error: The Geolocation service failed.' :
+        //        'Error: Your browser doesn\'t support geolocation.');
+        //    infoWindow.open(map);
+        //}
     </script>
-    <script async defer
+    <!--<script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyALQ96UESVOJm6-bgZtEwqtncv0_yQ42pM&callback=initMap">
-    </script>
+    </script>-->
 </body>
 </html> 
