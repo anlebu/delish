@@ -168,11 +168,11 @@
                     <div class="Screen__screenWrap___E6WBR">
                         <div style="width: 332.251px; height: 590.964px; padding: 0px;">
                             <div style="margin-left: 0px; width: 332.251px;border:solid;border-width:thin;border-color:black;">
-                                <div id="homebutton" style="position:absolute;width:65px;height:65px;top:700px;left:160px;"></div>
+                                <div class="homebutton" style="position:absolute;width:65px;height:65px;top:700px;left:160px;"></div>
                                 <div id="screen" style="overflow:hidden;height: 591px; margin-top: 0px; margin-bottom: 0px;">
                                     <div id="home" class="screenContent screens" style="display:none;background-image: url(static/Method-for-How-to-Restore-iPhone-6-Plus-2.jpg); background-size: 100%;background-repeat: no-repeat;background-position: center center;">
-                                        <div id="mapbutton" style="position:absolute;width:65px;height:65px;top:200px;left:200px;"></div>
-                                        <div id="appbutton" style="position:absolute;width:48px;height:48px;top:520px;left:50px;background-image: url(static/logo.png);background-size: 100%;background-repeat: no-repeat;background-position: center center; background-color:white;border-radius:10px;"></div>
+                                        <div class="mapbutton" style="position:absolute;width:65px;height:65px;top:200px;left:200px;"></div>
+                                        <div class="app1button" style="position:absolute;width:48px;height:48px;top:520px;left:50px;background-image: url(static/logo.png);background-size: 100%;background-repeat: no-repeat;background-position: center center; background-color:white;border-radius:10px;"></div>
                                         <div style="position:absolute;width:48px;height:10px;top:568px;left:50px;color:white;font-size:smaller;">Delish</div>
 
                                     </div>
@@ -180,8 +180,8 @@
                                         <div style="width:100%;height:100%;">
 
                                             <div style="position:relative;height:55px;padding:2px;padding-top:17px;width:100%;top:0px;left:0px;background-image: url(static/Clock2.png);background-size: 100%;background-repeat: no-repeat;background-position: top center; background-color:rgb(249,249,249);">
-                                                <div id="app1button" style="position:relative;width:48px;height:48px;background-image: url(static/logo.png);background-size: 100%;background-repeat: no-repeat;background-position: center center; background-color:white;border-radius:10px;"></div>
-
+                                                <!--<div id="app1button" style="position:relative;width:48px;height:48px;background-image: url(static/logo.png);background-size: 100%;background-repeat: no-repeat;background-position: center center; background-color:white;border-radius:10px;"></div>-->
+                                      
                                                 <!--as-->
 
                                             </div>
@@ -423,7 +423,15 @@
                                             <div style="position:relative;height:55px;padding:2px;width:100%;background-color:rgb(249,249,249);">
 
                                                 <div style="width:100%;font-size:2em;padding:2px; color:rgb(200,200,200)">
-                                                    <div class="selectedIcon centericon">
+                                                   
+                                                    <!--<div  class="app1button unselectedIcon centericon">
+                                                        <div  style="display:inline-block;width:35px;height:35px;background-image: url(static/logo.png);background-size: 100%;background-repeat: no-repeat;background-position: center center; background-color:white;border-radius:10px;"></div>
+
+                                                        <br />
+                                                        <p style="font-size:0.3em;-webkit-margin-before: 0em;-webkit-margin-after: 0em;">Home</p>
+                                                    </div>-->
+
+                                                    <div class="app1button selectedIcon centericon">
                                                         <i class="fas fa-utensils text-center" aria-hidden="true"></i>
                                                         <br />
                                                         <p style="font-size:0.3em;-webkit-margin-before: 0em;-webkit-margin-after: 0em;">Food</p>
@@ -455,15 +463,48 @@
                                         <div style="width:100%;height:100%;">
 
                                             <div style="position:relative;height:55px;padding:2px;padding-top:17px;width:100%;top:0px;left:0px;background-image: url(static/Clock2.png);background-size: 100%;background-repeat: no-repeat;background-position: top center; background-color:rgb(249,249,249);">
-                                                <div id="app1button2" style="position:relative;width:48px;height:48px;background-image: url(static/logo.png);background-size: 100%;background-repeat: no-repeat;background-position: center center; background-color:white;border-radius:10px;"></div>
-
-                                                <!--as2-->
 
                                             </div>
 
-                                            <div style="position:relative;width:100%;height:516px;">
+                                            <div style="position:relative;width:100%;height:461px;">
                                                 <iframe src="https://anlebu.github.io/delish/tequila/tequila/www.thesenortequila.com/index.html" style="width:100%;height:100%;border:none;"></iframe>
 
+                                            </div>
+
+
+                                            <div style="position:relative;height:55px;padding:2px;width:100%;background-color:rgb(249,249,249);">
+
+                                                <div style="width:100%;font-size:2em;padding:2px; color:rgb(200,200,200)">
+
+                                                    <!--<div class="app1button unselectedIcon centericon">
+                                                        <div style="display:inline-block;width:35px;height:35px;background-image: url(static/logo.png);background-size: 100%;background-repeat: no-repeat;background-position: center center; background-color:white;border-radius:10px;"></div>
+
+                                                        <br />
+                                                        <p style="font-size:0.3em;-webkit-margin-before: 0em;-webkit-margin-after: 0em;">Home</p>
+                                                    </div>-->
+
+                                                    <div class="app1button unselectedIcon centericon">
+                                                        <i class="fas fa-utensils text-center" aria-hidden="true"></i>
+                                                        <br />
+                                                        <p style="font-size:0.3em;-webkit-margin-before: 0em;-webkit-margin-after: 0em;">Food</p>
+                                                    </div>
+                                                    <div class="unselectedIcon centericon">
+                                                        <i class="fas fa-location-arrow text-center" aria-hidden="true"></i>
+                                                        <br />
+                                                        <p style="font-size:0.3em;-webkit-margin-before: 0em;-webkit-margin-after: 0em;">Location</p>
+                                                    </div>
+                                                    <div class="unselectedIcon centericon">
+                                                        <i class="fas fa-sliders-h text-center" aria-hidden="true"></i>
+                                                        <br />
+                                                        <p style="font-size:0.3em;-webkit-margin-before: 0em;-webkit-margin-after: 0em;">Settings</p>
+                                                    </div>
+                                                    <div class="unselectedIcon centericon">
+                                                        <i class="fas fa-search text-center" aria-hidden="true"></i>
+                                                        <br />
+                                                        <p style="font-size:0.3em;-webkit-margin-before: 0em;-webkit-margin-after: 0em;">Search</p>
+                                                    </div>
+                                                    <!--<i class="fas fa-search" style="margin-right:2px;"></i>-->
+                                                </div>
                                             </div>
                                         </div>
 
@@ -474,14 +515,14 @@
                                     <div id="map2" class="screenContent screens" style="display:none;background-image: url(static/appbackground.jpg); background-size: 130% 100%;background-repeat: no-repeat;background-position: center center;">
                                         <div style="width:100%;height:100%;">
 
-                                            <div style="position:relative;height:55px;padding:2px;padding-top:17px;width:100%;top:0px;left:0px;background-image: url(static/Clock2.png);background-size: 100%;background-repeat: no-repeat;background-position: top center; background-color:rgb(249,249,249);">
-                                                <div id="app1button3" style="position:relative;width:48px;height:48px;background-image: url(static/logo.png);background-size: 100%;background-repeat: no-repeat;background-position: center center; background-color:white;border-radius:10px;"></div>
+                                            <div style="position:relative;height:0px;padding:2px;padding-top:17px;width:100%;top:0px;left:0px;background-image: url(static/Clock2.png);background-size: 100%;background-repeat: no-repeat;background-position: top center; background-color:rgb(249,249,249);">
+                                                <!--<div id="app1button3" style="position:relative;width:48px;height:48px;background-image: url(static/logo.png);background-size: 100%;background-repeat: no-repeat;background-position: center center; background-color:white;border-radius:10px;"></div>-->
 
                                                 <!--as-->
 
                                             </div>
 
-                                            <div style="position:relative;width:100%;height:516px;">
+                                            <div style="position:relative;width:100%;height:570px;">
                                                 <iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d112042.91634509587!2d-81.30149513381564!3d28.64950263174331!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e6!4m5!1s0x88e76865018e5ab3%3A0x751b373223c2080b!2sUCF+College+of+Nursing%2C+Research+Parkway%2C+Orlando%2C+FL!3m2!1d28.587893299999998!2d-81.1993085!4m5!1s0x88e76dbf6de18bff%3A0xde546ab3b98b0fc3!2sSenor+Tequila%2C+855+E+State+Rd+434%2C+Winter+Springs%2C+FL+32708!3m2!1d28.703476!2d-81.28635899999999!5e0!3m2!1sen!2sus!4v1519579775811" frameborder="0" style="width:100%;height:100%;border:none;" allowfullscreen></iframe>
 
                                             </div>
@@ -533,23 +574,15 @@
     </script>
 
     <script>
-        $("#homebutton").click(function () {
+        $(".homebutton").click(function () {
             $('.screens').hide();
             $('#home').show();
         });
-        $("#mapbutton").click(function () {
+        $(".mapbutton").click(function () {
             $('.screens').hide();
             $('#map2').show();
         });
-        $("#appbutton").click(function () {
-            $('.screens').hide();
-            $('#apphome').show();
-        });
-        $("#app1button2").click(function () {
-            $('.screens').hide();
-            $('#apphome').show();
-        });
-        $("#app1button3").click(function () {
+        $(".app1button").click(function () {
             $('.screens').hide();
             $('#apphome').show();
         });
